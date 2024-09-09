@@ -1,0 +1,138 @@
+﻿@model WebAtividadeEntrevista.Models.ClienteModel
+@{
+    ViewBag.Title = "Alterar Cliente";
+}
+@section scripts{
+    <script>
+        var urlPost = '@Url.Action("Alterar", "Cliente", new { area = "" })';
+        var obj = @Html.Raw(Json.Encode(Model));
+        var urlRetorno = '@Url.Action("Index", "Cliente", new { area = "" })';
+
+        function salvarBeneficiario() {
+            var cpf = $('#cpfBeneficiario').val();
+            var nome = $('#nomeBeneficiario').val();
+            var idCliente = @Model.Id
+            $.ajax({
+                url: '@Url.Action("Adicionar", "Beneficiario")',
+                type: 'POST',
+                data: { cpf: cpf, nome: nome, idCliente: idCliente },
+                error:
+                    function (r) {
+                        if (r.status == 400)
+                            ModalDialog("Ocorreu um erro", r.responseJSON);
+                        else if (r.status == 500)
+                            ModalDialog("Ocorreu um erro", "Ocorreu um erro interno no servidor.");
+                    },
+                success:
+                    function (response) {
+                        ModalDialog('Beneficiário adicionado com sucesso!', response)
+                        $('#modalBeneficiario').modal('hide');
+                        location.reload();
+                }
+            });
+        }
+
+        function carregarBeneficiarios() {
+            var idCliente = @Model.Id
+            $.ajax({
+                url: '@Url.Action("ObterLista", "Beneficiario")',
+                type: 'POST',
+                data: { idCliente: idCliente },
+                success: function (response) {
+                    if (response.sucesso) {
+                        var tabela = $('#listaBeneficiarios');
+                        tabela.empty();
+
+                        $.each(response.beneficiarios, function (index, beneficiario) {
+                            var linha = '<tr>' +
+                                '<td>' + beneficiario.CPF + '</td>' +
+                                '<td>' + beneficiario.Nome + '</td>' +
+                                '<td>' +
+                                '<button class="btn btn-primary btn-sm" onclick="editarBeneficiario(' + beneficiario.Id + ')">Alterar</button>' +
+                                '<button class="btn btn-primary btn-sm" onclick="excluirBeneficiario(' + beneficiario.Id + ')">Excluir</button>' +
+                                '<td>' +
+                                '</tr>';
+                            tabela.append(linha);
+                        });
+                    } else {
+                        alert(response.mensagem);
+                    }
+                },
+                error: function (response) {
+                    alert('Erro ao carregar beneficiários: ' + response.responseText);
+                }
+            });
+        }
+
+        function excluirBeneficiario(idBeneficiario) {
+            if (confirm("Tem certeza que deseja excluir este beneficiário?")) {
+                $.ajax({
+                    url: '@Url.Action("Excluir", "Beneficiario")',
+                    type: 'POST',
+                    data: { id: idBeneficiario },
+                    success: function (response) {
+                        if (response.sucesso) {
+                            alert('Beneficiário excluído com sucesso!');
+                            carregarBeneficiarios();
+                        } else {
+                            alert(response.mensagem);
+                        }
+                    },
+                    error: function (response) {
+                        alert('Erro ao excluir beneficiário: ' + response.responseText);
+                    }
+                });
+            }
+        }
+
+        function editarBeneficiario(idBeneficiario) {
+            $.ajax({
+                url: '@Url.Action("Obter", "Beneficiario")',
+                type: 'POST',
+                data: { id: idBeneficiario },
+                success: function (response) {
+                    if (response.sucesso) {
+                        $('#cpfEditarBeneficiario').val(response.beneficiario.CPF);
+                        $('#nomeEditarBeneficiario').val(response.beneficiario.Nome);
+                        $('#idBeneficiarioEditar').val(response.beneficiario.Id);
+
+                        $('#modalEditarBeneficiario').modal('show');
+                    } else {
+                        alert(response.mensagem);
+                    }
+                },
+                error: function (response) {
+                    alert('Erro ao carregar dados do beneficiário: ' + response.responseText);
+                }
+            });
+        }
+
+        function salvarEdicaoBeneficiario() {
+            var idBeneficiario = $('#idBeneficiarioEditar').val(); // Pega o ID do beneficiário que está sendo editado
+            var nome = $('#nomeEditarBeneficiario').val(); // Pega o nome atualizado do beneficiário
+
+            $.ajax({
+                url: '@Url.Action("Editar", "Beneficiario")', // Action que vai lidar com a edição no controller
+                type: 'POST',
+                data: { Id: idBeneficiario, Nome: nome }, // Envia o ID, Nome atualizado e CPF
+                success: function (response) {
+                    if (response.sucesso) {
+                        alert('Beneficiário editado com sucesso!');
+                        $('#modalEditarBeneficiario').modal('hide'); // Fecha o modal de edição
+                        carregarBeneficiarios(); // Recarrega a lista de beneficiários
+                    } else {
+                        alert(response.mensagem);
+                    }
+                },
+                error: function (response) {
+                    alert('Erro ao salvar edição: ' + response.responseText);
+                }
+            });
+        }
+
+    </script>
+    @Scripts.Render("~/bundles/altClientes")
+
+}
+<h2>@Html.Raw(ViewBag.Title)</h2>
+@Html.Partial("Forms")

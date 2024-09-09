@@ -1,0 +1,86 @@
+<!-- Botão para abrir o modal -->
+<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalBeneficiario" onclick="carregarBeneficiarios()">
+    Beneficiários
+</button>
+
+<!-- Modal para inclusão de beneficiários -->
+<div class="modal fade" id="modalBeneficiario" tabindex="-1" role="dialog" aria-labelledby="modalBeneficiarioLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalBeneficiarioLabel">Beneficiário</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formBeneficiario">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="cpfBeneficiario">CPF</label>
+                                <input type="text" class="form-control" id="cpfBeneficiario" name="CPF" placeholder="Ex.: 010.011.111-00" required>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="nomeBeneficiario">Nome</label>
+                                <input type="text" class="form-control" id="nomeBeneficiario" name="NOME" placeholder="Ex.: Maria" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-success" onclick="salvarBeneficiario()">Incluir</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <hr />
+                <h6>Beneficiários Cadastrados:</h6>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>CPF</th>
+                            <th>Nome</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaBeneficiarios">
+                        <!-- Beneficiários serão carregados aqui via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal para edição de beneficiário -->
+<div class="modal fade" id="modalEditarBeneficiario" tabindex="-1" role="dialog" aria-labelledby="modalEditarBeneficiarioLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarBeneficiarioLabel">Editar Beneficiário</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarBeneficiario">
+                    <div class="form-group">
+                        <label for="cpfEditarBeneficiario">CPF</label>
+                        <input type="text" class="form-control" id="cpfEditarBeneficiario" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="nomeEditarBeneficiario">Nome</label>
+                        <input type="text" class="form-control" id="nomeEditarBeneficiario" required>
+                    </div>
+                    <input type="hidden" id="idBeneficiarioEditar">
+                    <button type="button" class="btn btn-success" onclick="salvarEdicaoBeneficiario()">Salvar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
