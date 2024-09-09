@@ -11,6 +11,10 @@ namespace WebAtividadeEntrevista.Controllers
 {
     public class ClienteController : Controller
     {
+        private const string _MENSAGEM_CLIENTE_JAH_CADASTRADO = "Cliente já cadastrado";
+        private const string _MENSAGEM_CADASTRO_SUCESSO = "Cadastro efetuado com sucesso";
+        private const string _MENSAGEM_CADASTRO_ALTERADO_SUCESSO = "Cadastro alterado com sucesso";
+
         public ActionResult Index()
         {
             return View();
@@ -42,7 +46,7 @@ namespace WebAtividadeEntrevista.Controllers
                 var clienteJahCadastrado = bo.VerificarExistencia(model.CPF);
                 if (clienteJahCadastrado)
                 {
-                    throw new Exception("Cliente já cadastrado");
+                    throw new Exception(_MENSAGEM_CLIENTE_JAH_CADASTRADO);
                 }
 
                 bo.Incluir(new Cliente()
@@ -59,7 +63,7 @@ namespace WebAtividadeEntrevista.Controllers
                     Telefone = model.Telefone
                 });
 
-                return Json("Cadastro efetuado com sucesso");
+                return Json(_MENSAGEM_CADASTRO_SUCESSO);
             }
             catch (Exception ex)
             {
@@ -101,7 +105,7 @@ namespace WebAtividadeEntrevista.Controllers
                     Telefone = model.Telefone
                 });
 
-                return Json("Cadastro alterado com sucesso");
+                return Json(_MENSAGEM_CADASTRO_ALTERADO_SUCESSO);
             }
         }
 

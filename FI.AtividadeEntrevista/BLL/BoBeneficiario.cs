@@ -1,6 +1,4 @@
-﻿using FI.AtividadeEntrevista.DML;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace FI.AtividadeEntrevista.BLL
 {
@@ -10,10 +8,10 @@ namespace FI.AtividadeEntrevista.BLL
         /// Inclui um novo beneficiario
         /// </summary>
         /// <param name="beneficiario">Objeto de beneficiario</param>
-        public long AdicionarBeneficiario(DML.Beneficiario beneficiario)
+        public void AdicionarBeneficiario(DML.Beneficiario beneficiario)
         {
             DAL.DaoBeneficiario benef = new DAL.DaoBeneficiario();
-            return benef.AdicionarBeneficiario(beneficiario);
+            benef.AdicionarBeneficiario(beneficiario);
         }
 
         public void EditarBeneficiario(long id, string nome)

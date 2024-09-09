@@ -1,6 +1,4 @@
-﻿using FI.AtividadeEntrevista.BLL;
-using FI.AtividadeEntrevista.DML;
-using System;
+﻿using FI.AtividadeEntrevista.DML;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -17,7 +15,7 @@ namespace FI.AtividadeEntrevista.DAL
         /// Inclui um novo beneficiario
         /// </summary>
         /// <param name="beneficiario">Objeto de beneficiario</param>
-        internal long AdicionarBeneficiario(DML.Beneficiario beneficiario)
+        internal void AdicionarBeneficiario(DML.Beneficiario beneficiario)
         {
             List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
 
@@ -26,15 +24,6 @@ namespace FI.AtividadeEntrevista.DAL
             parametros.Add(new System.Data.SqlClient.SqlParameter("IdCliente", beneficiario.IdCliente));
 
             base.Executar("FI_SP_IncBenef", parametros);
-
-            return 123041234123L;
-            //TODO: Aqui deve retonar o ID do cliente para montar a lista de beneficiarios na segunda parte do modal
-
-            //DataSet ds = base.Consultar("FI_SP_ConsCliente", parametros);
-            //long ret = 0;
-            //if (ds.Tables[0].Rows.Count > 0)
-            //    long.TryParse(ds.Tables[0].Rows[0][0].ToString(), out ret);
-            //return ret;
         }
 
         internal void EditarBeneficiario(long id, string nome)

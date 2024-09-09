@@ -11,6 +11,14 @@ namespace WebAtividadeEntrevista.Controllers
 {
     public class BeneficiarioController : Controller
     {
+        private const string _MENSAGEM_BENEFICIARIO_NAO_ENCONTRADO = "Beneficiário não encontrado.";
+        private const string _MENSAGEM_BENEFICIARIO_EXCLUIDO_SUCESSO = "Beneficiário excluído com sucesso.";
+        private const string _MENSAGEM_ID_BENEFICIARIO_INVALIDO = "ID do beneficiário inválido";
+        private const string _MENSAGEM_ID_CLIENTE_INVALIDO = "ID do cliente inválido";
+        private const string _MENSAGEM_BENEFICIARIO_JAH_CADASTRADO = "Beneficiario já cadastrado";
+        private const string _MENSAGEM_BENEFICIARIO_JAH_CADASTRADO_PARA_CLIENTE = "Beneficiário já cadastrado para este cliente";
+        private const string _MENSAGEM_CADASTRO_BENEFICIARIO_EFETUADO_SUCESSO = "Cadastro beneficiário efetuado com sucesso";
+        private const string _MENSAGEM_BENEFICIARIO_EDITADO_SUCESSO = "Beneficiário editado com sucesso.";
 
         [HttpPost]
         public JsonResult Obter(long id)
@@ -19,7 +27,7 @@ namespace WebAtividadeEntrevista.Controllers
             {
                 if (id <= 0)
                 {
-                    throw new ArgumentException("ID do beneficiário inválido");
+                    throw new ArgumentException(_MENSAGEM_ID_BENEFICIARIO_INVALIDO);
                 }
 
                 var boBeneficiario = new BoBeneficiario();
@@ -28,7 +36,7 @@ namespace WebAtividadeEntrevista.Controllers
 
                 if (beneficiario is null)
                 {
-                    return Json(new { sucesso = false, mensagem = "Beneficiário não encontrado." });
+                    return Json(new { sucesso = false, mensagem = _MENSAGEM_BENEFICIARIO_NAO_ENCONTRADO });
                 }
 
                 return Json(new { sucesso = true, beneficiario });
@@ -48,17 +56,12 @@ namespace WebAtividadeEntrevista.Controllers
             {
                 if (idCliente <= 0)
                 {
-                    throw new ArgumentException("ID do cliente inválido");
+                    throw new ArgumentException(_MENSAGEM_ID_CLIENTE_INVALIDO);
                 }
 
                 var boBeneficiario = new BoBeneficiario();
 
                 var beneficiarios = boBeneficiario.ObterBeneficiarios(idCliente);
-
-                if (!beneficiarios.Any())
-                {
-                    return Json(new { sucesso = false, mensagem = "Nenhum beneficiário encontrado para o cliente." });
-                }
 
                 return Json(new { sucesso = true, beneficiarios });
             }
@@ -90,23 +93,23 @@ namespace WebAtividadeEntrevista.Controllers
                 var beneficiarioJahCadastrado = boBeneficiario.VerificarExistencia(model.CPF);
                 if (beneficiarioJahCadastrado)
                 {
-                    throw new Exception("Beneficiario já cadastrado");
+                    throw new Exception(_MENSAGEM_BENEFICIARIO_JAH_CADASTRADO);
                 }
 
                 var beneficiarioJahAssociadoAoCliente = boBeneficiario.VerificarAssociacaoAoCliente(model.CPF, model.IdCliente);
                 if (beneficiarioJahAssociadoAoCliente)
                 {
-                    throw new Exception("Beneficiário já cadastrado para este cliente");
+                    throw new Exception(_MENSAGEM_BENEFICIARIO_JAH_CADASTRADO_PARA_CLIENTE);
                 }
 
-                model.Id = boBeneficiario.AdicionarBeneficiario(new Beneficiario()
+                boBeneficiario.AdicionarBeneficiario(new Beneficiario()
                 {
                     IdCliente = model.IdCliente,
                     Nome = model.Nome,
                     CPF = model.CPF
                 });
 
-                return Json("Cadastro beneficiário efetuado com sucesso");
+                return Json(_MENSAGEM_CADASTRO_BENEFICIARIO_EFETUADO_SUCESSO);
             }
             catch (Exception ex)
             {
@@ -125,12 +128,12 @@ namespace WebAtividadeEntrevista.Controllers
                 var beneficiario = boBeneficiario.ObterBeneficiario(id);
                 if (beneficiario == null)
                 {
-                    throw new Exception("Beneficiário não encontrado.");
+                    throw new Exception(_MENSAGEM_BENEFICIARIO_NAO_ENCONTRADO);
                 }
 
                 boBeneficiario.ExcluirBeneficiario(id);
 
-                return Json(new { sucesso = true, mensagem = "Beneficiário excluído com sucesso." });
+                return Json(new { sucesso = true, mensagem = _MENSAGEM_BENEFICIARIO_EXCLUIDO_SUCESSO });
             }
             catch (Exception ex)
             {
@@ -149,12 +152,12 @@ namespace WebAtividadeEntrevista.Controllers
                 var beneficiario = boBeneficiario.ObterBeneficiario(id);
                 if (beneficiario == null)
                 {
-                    throw new Exception("Beneficiário não encontrado.");
+                    throw new Exception(_MENSAGEM_BENEFICIARIO_NAO_ENCONTRADO);
                 }
 
                 boBeneficiario.EditarBeneficiario(id, nome);
 
-                return Json(new { sucesso = true, mensagem = "Beneficiário excluído com sucesso." });
+                return Json(new { sucesso = true, mensagem = _MENSAGEM_BENEFICIARIO_EDITADO_SUCESSO });
             }
             catch (Exception ex)
             {

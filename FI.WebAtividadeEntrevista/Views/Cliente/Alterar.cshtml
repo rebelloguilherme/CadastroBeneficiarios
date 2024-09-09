@@ -108,18 +108,18 @@
         }
 
         function salvarEdicaoBeneficiario() {
-            var idBeneficiario = $('#idBeneficiarioEditar').val(); // Pega o ID do beneficiário que está sendo editado
-            var nome = $('#nomeEditarBeneficiario').val(); // Pega o nome atualizado do beneficiário
+            var idBeneficiario = $('#idBeneficiarioEditar').val();
+            var nome = $('#nomeEditarBeneficiario').val();
 
             $.ajax({
-                url: '@Url.Action("Editar", "Beneficiario")', // Action que vai lidar com a edição no controller
+                url: '@Url.Action("Editar", "Beneficiario")',
                 type: 'POST',
-                data: { Id: idBeneficiario, Nome: nome }, // Envia o ID, Nome atualizado e CPF
+                data: { Id: idBeneficiario, Nome: nome },
                 success: function (response) {
                     if (response.sucesso) {
                         alert('Beneficiário editado com sucesso!');
-                        $('#modalEditarBeneficiario').modal('hide'); // Fecha o modal de edição
-                        carregarBeneficiarios(); // Recarrega a lista de beneficiários
+                        $('#modalEditarBeneficiario').modal('hide');
+                        carregarBeneficiarios();
                     } else {
                         alert(response.mensagem);
                     }
